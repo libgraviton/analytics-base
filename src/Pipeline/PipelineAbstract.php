@@ -45,7 +45,7 @@ abstract class PipelineAbstract {
 				$value = $this->cleanElements($value);
 			}
 
-			if ((!is_array($value) && $value != self::EMPTY_STRING) || (is_array($value) && !empty($value))) {
+			if ((!is_array($value) && $value !== self::EMPTY_STRING) || (is_array($value) && !empty($value))) {
 				$cleaned[$key] = $value;
 			}
 		}
