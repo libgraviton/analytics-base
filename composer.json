@@ -1,0 +1,20 @@
+{
+    "name": "graviton/analytics-base",
+    "description": "base classes for graviton analytics",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "List of contributors",
+            "homepage": "https://github.com/libgraviton/analytics-mongoshell-converter/graphs/contributors"
+        }
+    ],
+    "require": {
+        "php": ">=7.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Graviton\\AnalyticsBase\\": "src/"
+        }
+    }
+}
