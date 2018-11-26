@@ -46,9 +46,14 @@ abstract class PipelineAbstract {
 			}
 
 			if ((!is_array($value) && $value !== self::EMPTY_STRING) || (is_array($value) && !empty($value))) {
-				$cleaned[$key] = $value;
+				if (!is_numeric($key)) {
+					$cleaned[$key] = $value;
+				} else {
+					$cleaned[] = $value;
+				}
 			}
 		}
+
 		return $cleaned;
 	}
 
