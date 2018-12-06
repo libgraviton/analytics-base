@@ -2,6 +2,7 @@
 /**
  * abstract class for pipelines
  */
+
 namespace Graviton\AnalyticsBase\Pipeline;
 
 /**
@@ -14,6 +15,17 @@ abstract class PipelineAbstract {
     protected $params = [];
     protected const EMPTY_STRING = '__EMPTY__';
     protected $cleanCount = 4;
+
+    /**
+     * as we cleanup the pipeline array, only keys on this list will be unset if empty down
+     *
+     * @var array
+     */
+    protected $cleanupKeys = [
+        '$match',
+        '$and',
+        '$or'
+    ];
 
     public function setParams(array $params) {
         $this->params = $params;
@@ -56,7 +68,7 @@ abstract class PipelineAbstract {
 
     public function get() {
         $cleaned = $this->cleanElements($this->getPipeline());
-        for ($i = 0; $i < ($this->cleanCount+1); $i++) {
+        for ($i = 0; $i < ($this->cleanCount + 1); $i++) {
             $cleaned = $this->cleanElements($cleaned);
         }
         return array_values($cleaned);
@@ -69,12 +81,17 @@ abstract class PipelineAbstract {
                 $value = $this->cleanElements($value);
             }
 
-            if ((!is_array($value) && $value !== self::EMPTY_STRING) || (is_array($value) && !empty($value))) {
-                if (!is_numeric($key)) {
-                    $cleaned[$key] = $value;
-                } else {
-                    $cleaned[] = $value;
-                }
+            if ((in_array($key, $this->cleanupKeys) && (is_array($value) && empty($value))) ||
+                ($value === self::EMPTY_STRING)
+            ) {
+                // skip this!
+                continue;
+            }
+
+            if (!is_numeric($key)) {
+                $cleaned[$key] = $value;
+            } else {
+                $cleaned[] = $value;
             }
         }
 
